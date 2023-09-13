@@ -10,8 +10,11 @@ import cors from "cors";
 
 import mongoose from "mongoose";
 
+import router from "./router";
+
 const app = express();
 const server = http.createServer(app);
+const port = process.env.PORT;
 
 app.use(
   cors({
@@ -23,10 +26,12 @@ app.use(compression());
 app.use(cookieParser());
 app.use(bodyParser.json());
 
+app.use("/", router());
+
 mongoose.Promise = Promise;
 mongoose.connect(process.env.MONGO_URI);
 mongoose.connection.on("error", (error: Error) => console.log(error));
 
-server.listen(8080, () => {
-  console.log("Server running on http://localhost:8080/");
+server.listen(port, () => {
+  console.log(`Server running on http://localhost:${port}/`);
 });
